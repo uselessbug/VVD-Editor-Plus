@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>VVD Editor Plus</title>
+    <link href="static/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="static/logo.png" height="20" class="d-inline-block align-text-top" style="margin-right: 20px" alt="VOCALOID">VVD
+            Editor Plus
+        </a>
+    </div>
+</nav>
+<div class="input-group" style="height: 300px;">
+    <span class="input-group-text">密文</span>
+    <textarea class="form-control" aria-label="VVD密文" id="miwen"></textarea>
+    <div class="btn-group-vertical">
+        <button type="button" class="btn btn-outline-primary" onclick="jie_mi()">解密 →</button>
+        <button type="button" class="btn btn-outline-danger" onclick="jia_mi()">← 加密</button>
+    </div>
+    <span class="input-group-text">明文</span>
+    <textarea class="form-control" aria-label="VVD明文" id="mingwen"></textarea>
+</div>
+<div class="input-group mb-3" style="margin-top: 10px">
+    <span class="input-group-text"> = 快速生成VVD内容 = </span>
+    <span class="input-group-text" id="c">声库 CompID</span>
+    <input type="text" class="form-control" placeholder="例：BK8H76TAEHXWSKDB" aria-label="c"
+           aria-describedby="compid" id="compid">
+    <span class="input-group-text" id="d">声库 名字</span>
+    <input type="text" class="form-control" placeholder="例：Luotianyi_CHN_Meng" aria-label="dbname"
+           aria-describedby="d" id="dbname">
+    <button type="button" class="btn btn-primary" style="width: 200px" onclick="generate_vvd()">点击生成</button>
+</div>
+</body>
+<script>
+    function jie_mi() {
+        var miwen = document.getElementById('miwen').value;
+        var mingwen = '';
+        for (var i = 0; i < miwen.length; i++) {
+            var theChar = miwen.charAt(i)
+            if (vvd_dict[theChar] === undefined) {
+                mingwen = mingwen + theChar
+            } else {
+                mingwen = mingwen + vvd_dict[theChar]
+            }
+        }
+        document.getElementById('mingwen').value = mingwen;
+    }
+
+    function jia_mi() {
+        var mingwen = document.getElementById('mingwen').value;
+        var miwen = '';
+        for (var i = 0; i < mingwen.length; i++) {
+            var theChar = mingwen.charAt(i)
+            if (vvd_tran_dict[theChar] === undefined) {
+                miwen = miwen + theChar
+            } else {
+                miwen = miwen + vvd_tran_dict[theChar]
+            }
+        }
+        document.getElementById('miwen').value = miwen;
+    }
+
+    function generate_vvd() {
+        var vvd_content = '"ID" = "VOCALOID VIRTUAL VOICE"\n' +
+            '"FORMAT" = "4.0.0.0"\n' +
+            '"VOICEIDSTR" = "compid"\n' +
+            '"VOICENAME" = "dbname"\n' +
+            '"Breathiness" = "0"\n' +
+            '"Brightness" = "0"\n' +
+            '"Clearness" = "0"\n' +
+            '"Opening" = "0"\n' +
+            '"Gender Factor" = "0"\n' +
+            '"Growl" = "1"\n';
+
+        var compid = document.getElementById('compid').value;
+        var dbname = document.getElementById('dbname').value;
+
+        vvd_content = vvd_content.replace('compid', compid)
+        vvd_content = vvd_content.replace('dbname', dbname)
+        document.getElementById('mingwen').value = vvd_content
+
+        var mingwen = vvd_content
+        var miwen = '';
+        for (var i = 0; i < mingwen.length; i++) {
+            var theChar = mingwen.charAt(i)
+            if (vvd_tran_dict[theChar] === undefined) {
+                miwen = miwen + theChar
+            } else {
+                miwen = miwen + vvd_tran_dict[theChar]
+            }
+        }
+        document.getElementById('miwen').value = miwen;
+    }
+
+    var vvd_dict = {
+        'A': '[',
+        '[': 'A',
+        '_': 'E',
+        'E': '_',
+        'H': 'R',
+        'S': 'I',
+        'O': 'U',
+        'J': 'P',
+        'P': 'J',
+        'K': 'Q',
+        'Q': 'K',
+        'W': 'M',
+        'M': 'W',
+        'I': 'S',
+        '^': 'D',
+        'D': '^',
+        '\\': 'F',
+        ']': 'G',
+        'G': ']',
+        'F': '\\',
+        'R': 'H',
+        'U': 'O',
+        '@': 'Z',
+        'Z': '@',
+        'B': 'X',
+        'X': 'B',
+        'C': 'Y',
+        'Y': 'C',
+        'L': 'V',
+        'V': 'L',
+        'T': 'N',
+        'N': 'T',
+        '+': '1',
+        '(': '2',
+        ')': '3',
+        '.': '4',
+        '/': '5',
+        ',': '6',
+        '-': '7',
+        '"': '8',
+        '#': '9',
+        '*': '0',
+        '1': '+',
+        '2': '(',
+        '3': ')',
+        '4': '.',
+        '5': '/',
+        '6': ',',
+        '7': '-',
+        '8': '"',
+        '9': '#',
+        '0': '*',
+        '\'': '=',
+        '=': '\'',
+        '{': 'a',
+        'a': '{',
+        'h': 'r',
+        'r': 'h',
+        'n': 't',
+        't': 'n',
+        'o': 'u',
+        'u': 'o',
+        'g': '}',
+        '}': 'g',
+        'j': 'p',
+        'p': 'j',
+        'k': 'q',
+        'q': 'k',
+        'i': 's',
+        's': 'i',
+        'e': '\x7f',
+        '\x7f': 'e',
+        '~': 'd',
+        'd': '~',
+        'b': 'x',
+        'x': 'b',
+        'c': 'y',
+        'y': 'c',
+        'l': 'v',
+        'v': 'l',
+        '`': 'z',
+        'z': '`',
+        'm': 'w',
+        'w': 'm',
+        'f': '|',
+    };
+
+    var vvd_tran_dict = {
+        '[': 'A',
+        'A': '[',
+        'E': '_',
+        '_': 'E',
+        'R': 'H',
+        'I': 'S',
+        'U': 'O',
+        'P': 'J',
+        'J': 'P',
+        'Q': 'K',
+        'K': 'Q',
+        'M': 'W',
+        'W': 'M',
+        'S': 'I',
+        'D': '^',
+        '^': 'D',
+        'F': '\\',
+        'G': ']',
+        ']': 'G',
+        '\\': 'F',
+        'H': 'R',
+        'O': 'U',
+        'Z': '@',
+        '@': 'Z',
+        'X': 'B',
+        'B': 'X',
+        'Y': 'C',
+        'C': 'Y',
+        'V': 'L',
+        'L': 'V',
+        'N': 'T',
+        'T': 'N',
+        '1': '+',
+        '2': '(',
+        '3': ')',
+        '4': '.',
+        '5': '/',
+        '6': ',',
+        '7': '-',
+        '8': '"',
+        '9': '#',
+        '0': '*',
+        '+': '1',
+        '(': '2',
+        ')': '3',
+        '.': '4',
+        '/': '5',
+        ',': '6',
+        '-': '7',
+        '"': '8',
+        '#': '9',
+        '*': '0',
+        '=': "'",
+        "'": '=',
+        'a': '{',
+        '{': 'a',
+        'r': 'h',
+        'h': 'r',
+        't': 'n',
+        'n': 't',
+        'u': 'o',
+        'o': 'u',
+        '}': 'g',
+        'g': '}',
+        'p': 'j',
+        'j': 'p',
+        'q': 'k',
+        'k': 'q',
+        's': 'i',
+        'i': 's',
+        '\x7f': 'e',
+        'e': '\x7f',
+        'd': '~',
+        '~': 'd',
+        'x': 'b',
+        'b': 'x',
+        'y': 'c',
+        'c': 'y',
+        'v': 'l',
+        'l': 'v',
+        'z': '`',
+        '`': 'z',
+        'w': 'm',
+        'm': 'w',
+        '|': 'f'
+    }
+</script>
+</html>
