@@ -9,7 +9,8 @@
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="static/logo.png" height="20" class="d-inline-block align-text-top" style="margin-right: 20px" alt="VOCALOID">VVD
+            <img src="static/logo.png" height="20" class="d-inline-block align-text-top" style="margin-right: 20px"
+                 alt="VOCALOID">VVD
             Editor Plus
         </a>
     </div>
@@ -20,22 +21,39 @@
     <div class="btn-group-vertical">
         <button type="button" class="btn btn-outline-primary" onclick="jie_mi()">解密 →</button>
         <button type="button" class="btn btn-outline-danger" onclick="jia_mi()">← 加密</button>
+        <button type="button" class="btn btn-outline-success" onclick="download_vvd_content()">下载VVD</button>
     </div>
     <span class="input-group-text">明文</span>
     <textarea class="form-control" aria-label="VVD明文" id="mingwen"></textarea>
 </div>
 <div class="input-group mb-3" style="margin-top: 10px">
-    <span class="input-group-text"> = 快速生成VVD内容 = </span>
+    <span class="input-group-text" id="b">【一站式工具】</span>
     <span class="input-group-text" id="c">声库 CompID</span>
     <input type="text" class="form-control" placeholder="例：BK8H76TAEHXWSKDB" aria-label="c"
            aria-describedby="compid" id="compid">
     <span class="input-group-text" id="d">声库 名字</span>
     <input type="text" class="form-control" placeholder="例：Luotianyi_CHN_Meng" aria-label="dbname"
            aria-describedby="d" id="dbname">
-    <button type="button" class="btn btn-primary" style="width: 200px" onclick="generate_vvd()">点击生成</button>
+    <button type="button" class="btn btn-primary" style="width: 200px" onclick="generate_vvd()">生成声库VVD</button>
+    <button type="button" class="btn btn-success" style="width: 200px" onclick="download_vvd()">下载声库VVD</button>
+    <button type="button" class="btn btn-danger" style="width: 200px" onclick="download_bat()">下载安装脚本(V4)</button>
+    <button type="button" class="btn btn-warning" onclick="window.location.href='/help.html'">?</button>
 </div>
 </body>
 <script>
+    function download(filename, text) {
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        pom.setAttribute('download', filename);
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        } else {
+            pom.click();
+        }
+    }
+
     function jie_mi() {
         var miwen = document.getElementById('miwen').value;
         var mingwen = '';
@@ -62,6 +80,11 @@
             }
         }
         document.getElementById('miwen').value = miwen;
+    }
+
+    function download_vvd_content() {
+        var miwen = document.getElementById('miwen').value;
+        download('声库COMPID.vvd', miwen)
     }
 
     function generate_vvd() {
@@ -94,6 +117,28 @@
             }
         }
         document.getElementById('miwen').value = miwen;
+    }
+
+    function download_vvd() {
+        generate_vvd()
+        var compid = document.getElementById('compid').value;
+        var miwen = document.getElementById('miwen').value;
+        download(compid + '.vvd', miwen)
+    }
+
+    function download_bat() {
+        var compid = document.getElementById('compid').value;
+        var dbname = document.getElementById('dbname').value;
+
+        var indb = installbat.replace('#compid', compid)
+        var indb = indb.replace('#dbname', dbname)
+
+        download('install点bat', indb)
+
+        var undb = uninstallbat.replace('#compid', compid)
+        var undb = undb.replace('#dbname', dbname)
+
+        download('uninstall点bat', undb)
     }
 
     var vvd_dict = {
@@ -271,5 +316,57 @@
         'm': 'w',
         '|': 'f'
     }
+
+    var installbat = 'set DB_COMPID=#compid\n' +
+        'set DB_DRP=0B0032\n' +
+        'set DB_DEFAULTKEY=1145141919810\n' +
+        'set DB_NAME=#dbname\n' +
+        'set DB_VERSION=4\n' +
+        '\n' +
+        'cd /d %~dp0\n' +
+        'cd ..\n' +
+        'set DB_PATH=%cd%\n' +
+        'echo %DB_PATH%\n' +
+        '\n' +
+        'set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID4\\DATABASE\n' +
+        'set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\POCALOID4\\DATABASE\n' +
+        '::if "%DB_VERSION%"=="3" set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID3\\DATABASE\\VOICE3\n' +
+        '::if "%DB_VERSION%"=="3" set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VCLDASGN3\\DATABASE\\VOICE3\n' +
+        '\n' +
+        'if %PROCESSOR_ARCHITECTURE%==x86 (set reg3264= ) else (set reg3264=/reg:32)\n' +
+        '    \n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V DRP /T REG_SZ /D "%DB_DRP%" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V PATH /T REG_SZ /D "%DB_PATH%" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V INSTALLED /T REG_DWORD /D 1 %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V NAME /T REG_SZ /D "VOCALOID%DB_VERSION% Voice DB (%DB_NAME%)" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V TIME /T REG_SZ /D "BHMN74F9ED86FKAB" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%\\KEYS" /F /V default /T REG_SZ /D "%DB_DEFAULTKEY%" %reg3264%\n' +
+        '\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V DRP /T REG_SZ /D "%DB_DRP%" %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V PATH /T REG_SZ /D "%DB_PATH%" %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V INSTALLED /T REG_DWORD /D 1 %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V NAME /T REG_SZ /D "VOCALOID%DB_VERSION% Voice DB (%DB_NAME%)" %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V TIME /T REG_SZ /D "BHMN74F9ED86FKAB" %reg3264%\n' +
+        '::reg ADD "%POLIDIR%\\%DB_COMPID%\\KEYS" /F /ve /T REG_SZ /D "" %reg3264%\n' +
+        '::reg DELETE "%POLIDIR%\\%DB_COMPID%\\KEYS" /F /V default %reg3264%\n' +
+        '\n' +
+        '::call "%~dp0\\setxsy.bat"'
+
+    var uninstallbat = 'set DB_COMPID=#compid\n' +
+        'set DB_DRP=0B0032\n' +
+        'set DB_DEFAULTKEY=1145141919810\n' +
+        'set DB_NAME=#dbname\n' +
+        'set DB_VERSION=4\n' +
+        '\n' +
+        '\n' +
+        'set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID4\\DATABASE\n' +
+        'set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\POCALOID4\\DATABASE\n' +
+        'if "%DB_VERSION%"=="3" set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID3\\DATABASE\\VOICE3\n' +
+        'if "%DB_VERSION%"=="3" set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VCLDASGN3\\DATABASE\\VOICE3\n' +
+        '\n' +
+        'if %PROCESSOR_ARCHITECTURE%==x86 (set reg3264= ) else (set reg3264=/reg:32)\n' +
+        '\n' +
+        'reg DELETE "%BASEDIR%\\%DB_COMPID%" /F %reg3264%\n' +
+        'reg DELETE "%POLIDIR%\\%DB_COMPID%" /F %reg3264%\n'
 </script>
 </html>
