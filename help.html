@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>帮助</title>
+    <link href="static/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="static/logo.png" height="20" class="d-inline-block align-text-top" style="margin-right: 20px"
+                 alt="VOCALOID">VVD
+            Editor Plus 帮助
+        </a>
+    </div>
+</nav>
+<div class="container mt-4">
+    <h1 id='帮助'>帮助</h1>
+    <h2 id='什么是vvd'>什么是VVD</h2>
+    <p>VVD是位于声库ddb和ddi文件同目录下，与声库ddb文件同名的，用于编辑器识别声库基本信息的文件。</p>
+    <h2 id='编辑vvd可以干什么'>编辑VVD可以干什么</h2>
+    <p>编辑VVD的声库名称字段，可以更改声库在V4编辑器中的名字（V5直接识别注册表中的名字）。</p>
+    <h2 id='关于如何使用安装脚本'>关于如何使用安装脚本</h2>
+    <p>本脚本可以将V4和V5声库安装进V4编辑器使用</p>
+    <ol start=''>
+        <li>填入声库的CompID和声库名字后，点击下载声库VVD</li>
+        <li>将声库ddb和ddi文件和下载的vvd文件移动至特定位置的以相应CompID为名的子目录下，比如洛天依萌，可以移动至<code>D:\Program Files
+            (x86)\VoiceDB\LuoTianyiV4_CHN\BK8H76TAEHXWSKDB</code>，然后确认ddb、ddi和vvd的文件保持同名同目录。
+        </li>
+        <li>点击下载安装脚本，将<code>install点bat.txt</code>重新命名为<code>install.bat</code>，放置在第二步的目录下，然后<strong>以管理员运行</strong>
+        </li>
+        <li>然后声库就完成安装了，卸载脚本同理</li>
+
+    </ol>
+    <h2 id='关于compid'>关于CompID</h2>
+    <p>
+        由于本安装脚本是安装进V4编辑器使用的，所以必须使用V4对应语言的CompID才能安装成功（注意同机器不能有两个相同的ID），V4声库直接使用自带的CompID即可，而V5声库则得另外选择适当的V4CompID，这里提供了一些有限V4中文和日文声库的CompID，点击随机拾取
+    <div class="input-group">
+        <span class="input-group-text" id="basic-chn" style="margin-left: 20px;">V4中文CompID</span>
+        <input type="text" id="chn" style="width: 300px"/>
+        <button type="button" class="btn btn-primary" id="get_chn" onclick="get_random_chn()">拾取</button>
+        <span class="input-group-text" id="basic-jpn" style="margin-left: 20px;">V4日文CompID</span>
+        <input type="text" id="jpn" style="width: 300px"/>
+        <button type="button" class="btn btn-primary" id="get_jpn" onclick="get_random_jpn()">拾取</button>
+    </div>
+    </p>
+</div>
+</body>
+<script>
+    function get_random_chn() {
+        document.getElementById('chn').value = chnlist[Math.floor(Math.random() * chnlist.length)]
+    }
+
+    function get_random_jpn() {
+        document.getElementById('jpn').value = jpnlist[Math.floor(Math.random() * jpnlist.length)]
+    }
+
+    var chnlist = [
+        'BX49FFZ2PWRK4XE7',
+        'BL5H97EAGKSWWLDL',
+        'BN6E7987EMTRSNC3',
+        'BCBACYR3LB2LZCD4',
+        'BM5F98G8GLSSWMD3',
+        'BKA8C6BZLHZHZKC2',
+        'BMA8D82ZMLZH2MDE',
+        'BN6BD964MMTM2NEA',
+        'BK6CF6M5PHTN4KD6',
+        'BM9DD826MLYP2MEK',
+        'BC6ADYL3MBTL2CD5',
+        'BT89LD22WSXK8TE2',
+        'BMAAH863SLZL6ME4',
+        'BL7BD7C4MKWM2LC6',
+        'BY4FEGX8NXRS3YE3',
+        'BM6888CZFLTHTMC7',
+        'BKCEC6L7LH3RZKC8',
+        'BK8H79SAEHXWSKDB',
+        'BKCEC9G7LH3RZKC8',
+        'BMA8DBXZMLZH2MDE',
+        'BD7B84P4FCWMTDDA',
+        'BX6EMK57XWTR9XEC',
+        'BW7HCH5ALTWWZWEB',
+        'BD79E4T2NCWK3DDF',
+        'BM688B9ZFLTHTMC7',
+        'BM9DDBY6MLYP2MEK',
+        'BC6AD3G3MBTL2CD5',
+        'BN6BDC34MMTM2NEA',
+        'BCBAC3M3LB2LZCD4',
+        'BL7BDA94MKWM2LC6'
+    ]
+
+    var jpnlist = [
+        'BPAMGAZ8RNZS5PE9',
+        'BMADD8MZMLZH2MDE',
+        'BX3LFFY7PWPR4XF3',
+        'BE9H82K5FDYNTEDD',
+        'BE8DC2AZLDXHZECF',
+        'BM9KD8N6MLYP2MEK',
+        'BD7EEZK2NCWK3DDF',
+        'BNBCB9CYKM2GYNCE',
+        'BN6GD9W4MMTM2NEA',
+        'BT4GND44YSRMATF6',
+        'BT8ELDP2WSXK8TE2',
+        'BX6LMFX7XWTR9XEC',
+        'BX4PEFHANWRW3XEL',
+        'BY9DKG3ZTXYH7YEE',
+        'BL8HE745NKXN3LFK',
+        'BH9EE5E2NGYK3HD2',
+        'BN6EL9Z2WMTK8NEF',
+        'BM5M98B8GLSSWMD3',
+        'BCBFCYK3LB2LZCD4'
+    ]
+</script>
+</html>
