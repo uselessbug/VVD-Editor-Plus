@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta name="referrer" content="no-referrer"/>
+    <meta charset="UTF-8">
+    <title>VVD Editor Plus</title>
+    <link href="static/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="https://www.vocaloid.com/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="static/logo.png" height="20" class="d-inline-block align-text-top" style="margin-right: 20px"
+                 alt="VOCALOID">VVD
+            Editor Plus
+        </a>
+    </div>
+</nav>
+<div class="input-group" style="height: 300px;">
+    <span class="input-group-text">Coded</span>
+    <textarea class="form-control" aria-label="VVD密文" id="miwen"></textarea>
+    <div class="btn-group-vertical">
+        <button type="button" class="btn btn-outline-primary" onclick="jie_mi()">Decode →</button>
+        <button type="button" class="btn btn-outline-danger" onclick="jia_mi()">← Code</button>
+        <button type="button" class="btn btn-outline-success" onclick="download_vvd_content()">Download VVD File</button>
+    </div>
+    <span class="input-group-text">Decoded</span>
+    <textarea class="form-control" aria-label="VVD明文" id="mingwen"></textarea>
+</div>
+<div class="input-group mb-3" style="margin-top: 10px">
+    <span class="input-group-text" id="b">【One-stop Tool】</span>
+    <span class="input-group-text" id="c">Voicebank CompID</span>
+    <input type="text" class="form-control" placeholder="E.g. BK8H76TAEHXWSKDB" aria-label="c"
+           aria-describedby="compid" id="compid">
+    <span class="input-group-text" id="d">Voicebank Name</span>
+    <input type="text" class="form-control" placeholder="E.g. Luotianyi_CHN_Meng" aria-label="dbname"
+           aria-describedby="d" id="dbname">
+    <button type="button" class="btn btn-primary" style="width: 200px" onclick="generate_vvd()">Generate VVD for this voicebank</button>
+    <button type="button" class="btn btn-success" style="width: 200px" onclick="download_vvd()">Download VVD for this voicebank</button>
+    <button type="button" class="btn btn-danger" style="width: 200px" onclick="download_bat()">Download install installing script for this voicebank(V4)</button>
+    <button type="button" class="btn btn-warning" onclick="window.location.href='/help.html'">?</button>
+</div>
+</body>
+<script>
+    function download(filename, text) {
+        var pom = document.createElement('a');
+        pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        pom.setAttribute('download', filename);
+        if (document.createEvent) {
+            var event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            pom.dispatchEvent(event);
+        } else {
+            pom.click();
+        }
+    }
+
+    function jie_mi() {
+        var miwen = document.getElementById('miwen').value;
+        var mingwen = '';
+        for (var i = 0; i < miwen.length; i++) {
+            var theChar = miwen.charAt(i)
+            if (vvd_dict[theChar] === undefined) {
+                mingwen = mingwen + theChar
+            } else {
+                mingwen = mingwen + vvd_dict[theChar]
+            }
+        }
+        document.getElementById('mingwen').value = mingwen;
+    }
+
+    function jia_mi() {
+        var mingwen = document.getElementById('mingwen').value;
+        var miwen = '';
+        for (var i = 0; i < mingwen.length; i++) {
+            var theChar = mingwen.charAt(i)
+            if (vvd_tran_dict[theChar] === undefined) {
+                miwen = miwen + theChar
+            } else {
+                miwen = miwen + vvd_tran_dict[theChar]
+            }
+        }
+        document.getElementById('miwen').value = miwen;
+    }
+
+    function download_vvd_content() {
+        var miwen = document.getElementById('miwen').value;
+        download('声库COMPID.vvd', miwen)
+    }
+
+    function generate_vvd() {
+        var vvd_content = '"ID" = "VOCALOID VIRTUAL VOICE"\n' +
+            '"FORMAT" = "4.0.0.0"\n' +
+            '"VOICEIDSTR" = "compid"\n' +
+            '"VOICENAME" = "dbname"\n' +
+            '"Breathiness" = "0"\n' +
+            '"Brightness" = "0"\n' +
+            '"Clearness" = "0"\n' +
+            '"Opening" = "0"\n' +
+            '"Gender Factor" = "0"\n' +
+            '"Growl" = "1"\n';
+
+        var compid = document.getElementById('compid').value;
+        var dbname = document.getElementById('dbname').value;
+
+        vvd_content = vvd_content.replace('compid', compid)
+        vvd_content = vvd_content.replace('dbname', dbname)
+        document.getElementById('mingwen').value = vvd_content
+
+        var mingwen = vvd_content
+        var miwen = '';
+        for (var i = 0; i < mingwen.length; i++) {
+            var theChar = mingwen.charAt(i)
+            if (vvd_tran_dict[theChar] === undefined) {
+                miwen = miwen + theChar
+            } else {
+                miwen = miwen + vvd_tran_dict[theChar]
+            }
+        }
+        document.getElementById('miwen').value = miwen;
+    }
+
+    function download_vvd() {
+        generate_vvd()
+        var compid = document.getElementById('compid').value;
+        var miwen = document.getElementById('miwen').value;
+        download(compid + '.vvd', miwen)
+    }
+
+    function download_bat() {
+        var compid = document.getElementById('compid').value;
+        var dbname = document.getElementById('dbname').value;
+
+        var indb = installbat.replace('#compid', compid)
+        var indb = indb.replace('#dbname', dbname)
+
+        download('install.bat', indb)
+
+        var undb = uninstallbat.replace('#compid', compid)
+        var undb = undb.replace('#dbname', dbname)
+
+        download('uninstall.bat', undb)
+    }
+
+    var vvd_dict = {
+        'A': '[',
+        '[': 'A',
+        '_': 'E',
+        'E': '_',
+        'H': 'R',
+        'S': 'I',
+        'O': 'U',
+        'J': 'P',
+        'P': 'J',
+        'K': 'Q',
+        'Q': 'K',
+        'W': 'M',
+        'M': 'W',
+        'I': 'S',
+        '^': 'D',
+        'D': '^',
+        '\\': 'F',
+        ']': 'G',
+        'G': ']',
+        'F': '\\',
+        'R': 'H',
+        'U': 'O',
+        '@': 'Z',
+        'Z': '@',
+        'B': 'X',
+        'X': 'B',
+        'C': 'Y',
+        'Y': 'C',
+        'L': 'V',
+        'V': 'L',
+        'T': 'N',
+        'N': 'T',
+        '+': '1',
+        '(': '2',
+        ')': '3',
+        '.': '4',
+        '/': '5',
+        ',': '6',
+        '-': '7',
+        '"': '8',
+        '#': '9',
+        '*': '0',
+        '1': '+',
+        '2': '(',
+        '3': ')',
+        '4': '.',
+        '5': '/',
+        '6': ',',
+        '7': '-',
+        '8': '"',
+        '9': '#',
+        '0': '*',
+        '\'': '=',
+        '=': '\'',
+        '{': 'a',
+        'a': '{',
+        'h': 'r',
+        'r': 'h',
+        'n': 't',
+        't': 'n',
+        'o': 'u',
+        'u': 'o',
+        'g': '}',
+        '}': 'g',
+        'j': 'p',
+        'p': 'j',
+        'k': 'q',
+        'q': 'k',
+        'i': 's',
+        's': 'i',
+        'e': '\x7f',
+        '\x7f': 'e',
+        '~': 'd',
+        'd': '~',
+        'b': 'x',
+        'x': 'b',
+        'c': 'y',
+        'y': 'c',
+        'l': 'v',
+        'v': 'l',
+        '`': 'z',
+        'z': '`',
+        'm': 'w',
+        'w': 'm',
+        'f': '|',
+    };
+
+    var vvd_tran_dict = {
+        '[': 'A',
+        'A': '[',
+        'E': '_',
+        '_': 'E',
+        'R': 'H',
+        'I': 'S',
+        'U': 'O',
+        'P': 'J',
+        'J': 'P',
+        'Q': 'K',
+        'K': 'Q',
+        'M': 'W',
+        'W': 'M',
+        'S': 'I',
+        'D': '^',
+        '^': 'D',
+        'F': '\\',
+        'G': ']',
+        ']': 'G',
+        '\\': 'F',
+        'H': 'R',
+        'O': 'U',
+        'Z': '@',
+        '@': 'Z',
+        'X': 'B',
+        'B': 'X',
+        'Y': 'C',
+        'C': 'Y',
+        'V': 'L',
+        'L': 'V',
+        'N': 'T',
+        'T': 'N',
+        '1': '+',
+        '2': '(',
+        '3': ')',
+        '4': '.',
+        '5': '/',
+        '6': ',',
+        '7': '-',
+        '8': '"',
+        '9': '#',
+        '0': '*',
+        '+': '1',
+        '(': '2',
+        ')': '3',
+        '.': '4',
+        '/': '5',
+        ',': '6',
+        '-': '7',
+        '"': '8',
+        '#': '9',
+        '*': '0',
+        '=': "'",
+        "'": '=',
+        'a': '{',
+        '{': 'a',
+        'r': 'h',
+        'h': 'r',
+        't': 'n',
+        'n': 't',
+        'u': 'o',
+        'o': 'u',
+        '}': 'g',
+        'g': '}',
+        'p': 'j',
+        'j': 'p',
+        'q': 'k',
+        'k': 'q',
+        's': 'i',
+        'i': 's',
+        '\x7f': 'e',
+        'e': '\x7f',
+        'd': '~',
+        '~': 'd',
+        'x': 'b',
+        'b': 'x',
+        'y': 'c',
+        'c': 'y',
+        'v': 'l',
+        'l': 'v',
+        'z': '`',
+        '`': 'z',
+        'w': 'm',
+        'm': 'w',
+        '|': 'f'
+    }
+
+    var installbat = 'set DB_COMPID=#compid\n' +
+        'set DB_DRP=0B0032\n' +
+        'set DB_DEFAULTKEY=1145141919810\n' +
+        'set DB_NAME=#dbname\n' +
+        'set DB_VERSION=4\n' +
+        '\n' +
+        'cd /d %~dp0\n' +
+        'cd ..\n' +
+        'set DB_PATH=%cd%\n' +
+        'echo %DB_PATH%\n' +
+        '\n' +
+        'set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID4\\DATABASE\n' +
+        'set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\POCALOID4\\DATABASE\n' +
+        '::if "%DB_VERSION%"=="3" set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID3\\DATABASE\\VOICE3\n' +
+        '::if "%DB_VERSION%"=="3" set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VCLDASGN3\\DATABASE\\VOICE3\n' +
+        '\n' +
+        'if %PROCESSOR_ARCHITECTURE%==x86 (set reg3264= ) else (set reg3264=/reg:32)\n' +
+        '    \n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V DRP /T REG_SZ /D "%DB_DRP%" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V PATH /T REG_SZ /D "%DB_PATH%" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V INSTALLED /T REG_DWORD /D 1 %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V NAME /T REG_SZ /D "VOCALOID%DB_VERSION% Voice DB (%DB_NAME%)" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%" /F /V TIME /T REG_SZ /D "BHMN74F9ED86FKAB" %reg3264%\n' +
+        'reg ADD "%BASEDIR%\\%DB_COMPID%\\KEYS" /F /V default /T REG_SZ /D "%DB_DEFAULTKEY%" %reg3264%\n' +
+        '\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V DRP /T REG_SZ /D "%DB_DRP%" %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V PATH /T REG_SZ /D "%DB_PATH%" %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V INSTALLED /T REG_DWORD /D 1 %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V NAME /T REG_SZ /D "VOCALOID%DB_VERSION% Voice DB (%DB_NAME%)" %reg3264%\n' +
+        'reg ADD "%POLIDIR%\\%DB_COMPID%" /F /V TIME /T REG_SZ /D "BHMN74F9ED86FKAB" %reg3264%\n' +
+        '::reg ADD "%POLIDIR%\\%DB_COMPID%\\KEYS" /F /ve /T REG_SZ /D "" %reg3264%\n' +
+        '::reg DELETE "%POLIDIR%\\%DB_COMPID%\\KEYS" /F /V default %reg3264%\n' +
+        '\n' +
+        '::call "%~dp0\\setxsy.bat"'
+
+    var uninstallbat = 'set DB_COMPID=#compid\n' +
+        'set DB_DRP=0B0032\n' +
+        'set DB_DEFAULTKEY=1145141919810\n' +
+        'set DB_NAME=#dbname\n' +
+        'set DB_VERSION=4\n' +
+        '\n' +
+        '\n' +
+        'set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID4\\DATABASE\n' +
+        'set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\POCALOID4\\DATABASE\n' +
+        'if "%DB_VERSION%"=="3" set BASEDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VOCALOID3\\DATABASE\\VOICE3\n' +
+        'if "%DB_VERSION%"=="3" set POLIDIR=HKEY_LOCAL_MACHINE\\SOFTWARE\\VCLDASGN3\\DATABASE\\VOICE3\n' +
+        '\n' +
+        'if %PROCESSOR_ARCHITECTURE%==x86 (set reg3264= ) else (set reg3264=/reg:32)\n' +
+        '\n' +
+        'reg DELETE "%BASEDIR%\\%DB_COMPID%" /F %reg3264%\n' +
+        'reg DELETE "%POLIDIR%\\%DB_COMPID%" /F %reg3264%\n'
+</script>
+</html>
