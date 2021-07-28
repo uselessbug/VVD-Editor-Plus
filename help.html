@@ -3,7 +3,7 @@
 <head>
     <meta name="referrer" content="no-referrer"/>
     <meta charset="UTF-8">
-    <title>Help</title>
+    <title>帮助</title>
     <link href="static/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="https://www.vocaloid.com/favicon.ico" type="image/x-icon">
 </head>
@@ -13,39 +13,39 @@
         <a class="navbar-brand" href="#">
             <img src="static/logo.png" height="20" class="d-inline-block align-text-top" style="margin-right: 20px"
                  alt="VOCALOID">VVD
-            Editor Plus Help
+            Editor Plus 帮助
         </a>
-        <a class="navbar-brand" one-link-mark="yes" style="position: relative;right: 0px" href="../help">CHS</a>
+        <a class="navbar-brand" one-link-mark="yes" style="position: relative;right: 0px" href="en/help">EN</a>
     </div>
 </nav>
 <div class="container mt-4">
-    <h1 id='帮助'>Help</h1>
-    <h2 id='什么是vvd'>What is VVD</h2>
-    <p>VVD is a file under the same path as .ddb and .ddi files, using the same name as .ddb and .ddi files, storing the basic information about the voicebank.</p>
-    <h2 id='编辑vvd可以干什么'>What can we do by editing VVD</h2>
-    <p>Editing <code>VOICENAME</code> in VVD can change the name of a voicebank in V2/3/4 editor. (V5 editor reads the name string in registry and won't be affected.)</p>
-    <h2 id='关于如何使用安装脚本'>How to use the install script</h2>
-    <p>This script can install a voicebank into V4</p>
+    <h1 id='帮助'>帮助</h1>
+    <h2 id='什么是vvd'>什么是VVD</h2>
+    <p>VVD是位于声库ddb和ddi文件同目录下，与声库ddb文件同名的，用于编辑器识别声库基本信息的文件。</p>
+    <h2 id='编辑vvd可以干什么'>编辑VVD可以干什么</h2>
+    <p>编辑VVD的声库名称字段，可以更改声库在V4编辑器中的名字（V5直接识别注册表中的名字）。</p>
+    <h2 id='关于如何使用安装脚本'>关于如何使用安装脚本</h2>
+    <p>本脚本可以将V4和V5声库安装进V4编辑器使用</p>
     <ol start=''>
-        <li>Fill in the CompID and the name of a voicebank, download the.vvd file and the script.</li>
-        <li>Move the .ddb, .ddi, and .vvd file under a subdir whose name is same as the <code>CompID</code> of this voicebank. (E.g. Luotianyi_CHN_Meng: <code>D:\Program Files
-            (x86)\VoiceDB\LuoTianyiV4_CHN\BK8H76TAEHXWSKDB</code>) Confirm .ddb, .ddi and .vvd files share the same name and under the same dir.
+        <li>填入声库的CompID和声库名字后，点击下载声库VVD</li>
+        <li>将声库ddb和ddi文件和下载的vvd文件移动至特定位置的以相应CompID为名的子目录下，比如洛天依萌，可以移动至<code>D:\Program Files
+            (x86)\VoiceDB\LuoTianyiV4_CHN\BK8H76TAEHXWSKDB</code>，然后确认ddb、ddi和vvd的文件保持同名同目录。
         </li>
-        <li>Move <code>install.bat</code> into the same dir as above and <strong>Run as Administrator</strong>.
+        <li>点击下载安装脚本，将<code>install.bat</code>放置在第二步的目录下，然后<strong>以管理员运行</strong>
         </li>
-        <li>Now the voicebank should have been successfully installed. Similarly, you can uninstall it using <code>uninstall.bat</code>.</li>
+        <li>然后声库就完成安装了，卸载脚本同理</li>
 
     </ol>
-    <h2 id='关于compid'>About CompID</h2>
+    <h2 id='关于compid'>关于CompID</h2>
     <p>
-        Since the install script is for V4, you need to get a CompID for the voicebank which matches its language. V4 voicebanks can directly use the origin CompID. V5 voicebanks, however, need to get a corresponding V4 CompID. Here are some V4 CHN CompID and V4 JPN CompID, click to pick it randomly.
+        由于本安装脚本是安装进V4编辑器使用的，所以必须使用V4对应语言的CompID才能安装成功（注意同机器不能有两个相同的ID），V4声库直接使用自带的CompID即可，而V5声库则得另外选择适当的V4CompID，这里提供了一些有限V4中文和日文声库的CompID，点击随机拾取
     <div class="input-group">
-        <span class="input-group-text" id="basic-chn" style="margin-left: 20px;">V4 CHN CompID</span>
+        <span class="input-group-text" id="basic-chn" style="margin-left: 20px;">V4中文CompID</span>
         <input type="text" id="chn" style="width: 300px"/>
-        <button type="button" class="btn btn-primary" id="get_chn" onclick="get_random_chn()">Pick</button>
-        <span class="input-group-text" id="basic-jpn" style="margin-left: 20px;">V4 JPN CompID</span>
+        <button type="button" class="btn btn-primary" id="get_chn" onclick="get_random_chn()">拾取</button>
+        <span class="input-group-text" id="basic-jpn" style="margin-left: 20px;">V4日文CompID</span>
         <input type="text" id="jpn" style="width: 300px"/>
-        <button type="button" class="btn btn-primary" id="get_jpn" onclick="get_random_jpn()">Pick</button>
+        <button type="button" class="btn btn-primary" id="get_jpn" onclick="get_random_jpn()">拾取</button>
     </div>
     </p>
 </div>
