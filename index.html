@@ -15,32 +15,32 @@
                  alt="VOCALOID">VVD
             Editor Plus
         </a>
-        <a class="navbar-brand" one-link-mark="yes" style="position: relative;right: 0px" href="en">EN</a>
+        <a class="navbar-brand" one-link-mark="yes" style="position: relative;right: 0px" href="../">CHS</a>
     </div>
 </nav>
 <div class="input-group" style="height: 300px;">
-    <span class="input-group-text">密文</span>
+    <span class="input-group-text">Coded</span>
     <textarea class="form-control" aria-label="VVD密文" id="miwen"></textarea>
     <div class="btn-group-vertical">
-        <button type="button" class="btn btn-outline-primary" onclick="jie_mi()">解密 →</button>
-        <button type="button" class="btn btn-outline-danger" onclick="jia_mi()">← 加密</button>
-        <button type="button" class="btn btn-outline-success" onclick="download_vvd_content()">下载VVD</button>
+        <button type="button" class="btn btn-outline-primary" onclick="jie_mi()">Decode →</button>
+        <button type="button" class="btn btn-outline-danger" onclick="jia_mi()">← Code</button>
+        <button type="button" class="btn btn-outline-success" onclick="download_vvd_content()">Download VVD File</button>
     </div>
-    <span class="input-group-text">明文</span>
+    <span class="input-group-text">Decoded</span>
     <textarea class="form-control" aria-label="VVD明文" id="mingwen"></textarea>
 </div>
 <div class="input-group mb-3" style="margin-top: 10px">
-    <span class="input-group-text" id="b">【一站式工具】</span>
-    <span class="input-group-text" id="c">声库 CompID</span>
-    <input type="text" class="form-control" placeholder="例：BK8H76TAEHXWSKDB" aria-label="c"
+    <span class="input-group-text" id="b">【One-stop Tool】</span>
+    <span class="input-group-text" id="c">Voicebank CompID</span>
+    <input type="text" class="form-control" placeholder="E.g. BK8H76TAEHXWSKDB" aria-label="c"
            aria-describedby="compid" id="compid">
-    <span class="input-group-text" id="d">声库 名字</span>
-    <input type="text" class="form-control" placeholder="例：Luotianyi_CHN_Meng" aria-label="dbname"
+    <span class="input-group-text" id="d">Voicebank Name</span>
+    <input type="text" class="form-control" placeholder="E.g. Luotianyi_CHN_Meng" aria-label="dbname"
            aria-describedby="d" id="dbname">
-    <button type="button" class="btn btn-primary" style="width: 200px" onclick="generate_vvd()">生成声库VVD</button>
-    <button type="button" class="btn btn-success" style="width: 200px" onclick="download_vvd()">下载声库VVD</button>
-    <button type="button" class="btn btn-danger" style="width: 200px" onclick="download_bat()">下载安装脚本(V4)</button>
-    <button type="button" class="btn btn-warning" onclick="window.location.href='/help.html'">?</button>
+    <button type="button" class="btn btn-primary" style="width: 200px" onclick="generate_vvd()">Generate VVD for this voicebank</button>
+    <button type="button" class="btn btn-success" style="width: 200px" onclick="download_vvd()">Download VVD for this voicebank</button>
+    <button type="button" class="btn btn-danger" style="width: 200px" onclick="download_bat()">Download install installing script for this voicebank(V4)</button>
+    <button type="button" class="btn btn-warning" onclick="window.location.href='/en/help.html'">?</button>
 </div>
 </body>
 <script>
