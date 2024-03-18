@@ -42,9 +42,16 @@
         <span class="input-group-text" id="basic-chn" style="margin-left: 20px;">V4 CHN CompID</span>
         <input type="text" id="chn" style="width: 300px"/>
         <button type="button" class="btn btn-primary" id="get_chn" onclick="get_random_chn()">Pick</button>
+		</div>
+	<div class="input-group">
         <span class="input-group-text" id="basic-jpn" style="margin-left: 20px;">V4 JPN CompID</span>
         <input type="text" id="jpn" style="width: 300px"/>
         <button type="button" class="btn btn-primary" id="get_jpn" onclick="get_random_jpn()">Pick</button>
+		</div>
+	<div class="input-group">
+        <span class="input-group-text" id="basic-eng" style="margin-left: 20px;">V4 ENG CompID</span>
+        <input type="text" id="eng" style="width: 300px"/>
+        <button type="button" class="btn btn-primary" id="get_eng" onclick="get_random_eng()">Pick</button>
     </div>
     </p>
 </div>
@@ -56,6 +63,10 @@
 
     function get_random_jpn() {
         document.getElementById('jpn').value = jpnlist[Math.floor(Math.random() * jpnlist.length)]
+    }
+
+    function get_random_eng() {
+        document.getElementById('eng').value = jpnlist[Math.floor(Math.random() * englist.length)]
     }
 
     var chnlist = [
@@ -112,5 +123,34 @@
         'BM5M98B8GLSSWMD3',
         'BCBFCYK3LB2LZCD4'
     ]
+
+    var englist = [
+        'BXI5WRTWNYF9CSG6',
+        'BLLR2PRJLTVT7VA0',
+        'BAIOIIQUZET7K7TZ',
+        'BAOGOJOS7JV24L3A',
+        'BTT44A75Z6D0A5FA',
+        'BIXIAD9ONT2XK45H',
+        'BP1HG461N9ZKPPLX',
+        'BSCYZZIGTPLT1ZGH',
+        'BVT0H52GWP0X38UI',
+        'BMBYE2CCHLCL16N6',
+        'BGK5C1CWQ3XLZ1YU',
+        'BXF9LMPMWPQ8YUIB',
+        'BB1M9132ZR8GT601',
+        'BZV0EWHRW5HKOH07',
+        'BPVF1TRUKA4C7TU3',
+        'BGJYU3KQ9ZHYZNYJ',
+        'BU1V7ROSXNGYUS38',
+        'BXO5Q2H7B2V2XAGX',
+        'BE1VO1T2JVRLQ8ZV',
+        'BAIOW91Q7N1RHYW1',
+        'BUX9X4GS1P33VAXW',
+        'BO2LE8MD6RM6JB4T',
+        'BNSHEXH5U91KGPJA',
+        'BHG08OHURSXGBTRX',
+        'BM6AW0CLPJIWZSOV'
+]
+
 </script>
 </html>
